@@ -10,7 +10,7 @@ javafx {
 }
 
 application {
-    mainClass = 'Pong'
+    mainClass = 'Main'
 }
 
 repositories {
