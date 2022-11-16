@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 
 public class Main extends Application {
-    private static Game game;
+    private Game game;
 
     public static void main(String[] args) {
         //calls init(), start(), and stop()

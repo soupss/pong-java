@@ -1,4 +1,5 @@
 import javafx.stage.Stage;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -10,14 +11,16 @@ import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 
+
 class Game {
-    public Stage stage;
-    public Group root;
-    public Scene scene;
-    public Canvas canvas;
-    public GraphicsContext gc;
-    final static int WINDOW_WIDTH = 800;
-    final static int WINDOW_HEIGHT = 600;
+    private Stage stage;
+    private Group root;
+    private Scene scene;
+    private Canvas canvas;
+    private GraphicsContext gc;
+
+    private Paddle player;
+    private Paddle enemy;
 
     private ArrayList<String> input = new ArrayList<String>();
 
@@ -25,7 +28,7 @@ class Game {
         this.stage = stage;
         this.root = new Group();
         this.scene = new Scene(this.root);
-        this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.canvas = new Canvas(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
 
         this.stage.setTitle("Pong");
@@ -48,24 +51,33 @@ class Game {
                     input.remove(code);
                 }
         });
+
+        this.player = new Paddle(Settings.PADDLE_OFFSET, Settings.SCREEN_HEIGHT/2 - Settings.PADDLE_HEIGHT/2);
+        this.enemy = new Paddle(Settings.SCREEN_WIDTH - Settings.PADDLE_WIDTH - Settings.PADDLE_OFFSET, Settings.SCREEN_HEIGHT/2 - Settings.PADDLE_HEIGHT/2);
     }
 
 
     public void update() {
-        this.gc.setFill(Color.TEAL);
+        this.gc.setFill(Settings.COLOR_BACKGROUND);
         this.handleInput();
-        this.gc.fillRect(0,0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.gc.fillRect(0,0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
+    }
+
+
+    private void handleInput() {
+        if(!input.isEmpty()) System.out.println(input);
+        if(input.contains("ESCAPE")) Platform.exit();
+        // movement
+        if(input.contains("D")) this.player.moveDown();
+        if(input.contains("F")) this.player.moveUp();
+        if(input.contains("J")) this.enemy.moveDown();
+        if(input.contains("K")) this.enemy.moveUp();
     }
 
 
     public void render() {
         this.stage.show();
-    }
-
-
-    private void handleInput() {
-        if(input.contains("G")) gc.setFill(Color.GREEN);
-        if(input.contains("B")) gc.setFill(Color.BLUE);
-        if(input.contains("R")) gc.setFill(Color.RED);
+        this.player.render(this.gc);
+        this.enemy.render(this.gc);
     }
 }
