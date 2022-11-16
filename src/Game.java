@@ -18,11 +18,12 @@ class Game {
     private Scene scene;
     private Canvas canvas;
     private GraphicsContext gc;
+    private ArrayList<String> input;
 
     private Paddle player;
     private Paddle enemy;
+    private Ball ball;
 
-    private ArrayList<String> input = new ArrayList<String>();
 
     public Game(Stage stage) {
         this.stage = stage;
@@ -30,6 +31,7 @@ class Game {
         this.scene = new Scene(this.root);
         this.canvas = new Canvas(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
+        this.input = new ArrayList<String>();
 
         this.stage.setTitle("Pong");
         this.stage.setScene(this.scene);
@@ -54,24 +56,20 @@ class Game {
 
         this.player = new Paddle(Settings.PADDLE_OFFSET, Settings.SCREEN_HEIGHT/2 - Settings.PADDLE_HEIGHT/2);
         this.enemy = new Paddle(Settings.SCREEN_WIDTH - Settings.PADDLE_WIDTH - Settings.PADDLE_OFFSET, Settings.SCREEN_HEIGHT/2 - Settings.PADDLE_HEIGHT/2);
+        this.ball = new Ball(Settings.SCREEN_WIDTH / 2 - Settings.BALL_SIZE / 2, Settings.SCREEN_WIDTH / 2 - Settings.BALL_SIZE / 2);
     }
 
 
     public void update() {
         this.gc.setFill(Settings.COLOR_BACKGROUND);
+
+        // ball collision
+        if (this.ball.getY() <= 0) this.ball.setDirY(1);
+        if (this.ball.getY() + Settings.BALL_SIZE >= Settings.SCREEN_HEIGHT) this.ball.setDirY(-1);
+        this.ball.update();
         this.handleInput();
+
         this.gc.fillRect(0,0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
-    }
-
-
-    private void handleInput() {
-        if(!input.isEmpty()) System.out.println(input);
-        if(input.contains("ESCAPE")) Platform.exit();
-        // movement
-        if(input.contains("D")) this.player.moveDown();
-        if(input.contains("F")) this.player.moveUp();
-        if(input.contains("J")) this.enemy.moveDown();
-        if(input.contains("K")) this.enemy.moveUp();
     }
 
 
@@ -79,5 +77,21 @@ class Game {
         this.stage.show();
         this.player.render(this.gc);
         this.enemy.render(this.gc);
+        this.ball.render(this.gc);
+    }
+
+
+    private void handleInput() {
+        if(!input.isEmpty()) System.out.println(input);
+        if(input.contains("ESCAPE")) Platform.exit();
+        // movement
+        if(input.contains("D") && this.player.getY() < Settings.SCREEN_HEIGHT - Settings.PADDLE_HEIGHT)
+            this.player.moveDown();
+        if(input.contains("F") && this.player.getY() > 0)
+            this.player.moveUp();
+        if(input.contains("J") && this.enemy.getY() < Settings.SCREEN_HEIGHT - Settings.PADDLE_HEIGHT)
+            this.enemy.moveDown();
+        if(input.contains("K") && this.enemy.getY() > 0)
+            this.enemy.moveUp();
     }
 }

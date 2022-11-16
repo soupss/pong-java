@@ -11,4 +11,6 @@ public class Settings {
     public static final int PADDLE_SPEED = 5;
     // paddle spacing from the edge
     public static final int PADDLE_OFFSET = 30;
+    public static final int BALL_SIZE = 25;
+    public static final int BALL_SPEED = 1;
 }

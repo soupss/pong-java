@@ -6,6 +6,10 @@ class Paddle {
     private int width, height;
 
 
+    public int getX() { return this.x;}
+    public int getY() { return this.y;}
+
+
     public Paddle(int x, int y) {
         this.x = x;
         this.y = y;
@@ -21,15 +25,13 @@ class Paddle {
 
 
     public void moveUp() {
-        if(this.y > 0) {
-            this.y -= Settings.PADDLE_SPEED;
-        }
+        this.y -= Settings.PADDLE_SPEED;
     }
 
 
     public void moveDown() {
-        if(this.y + this.height < Settings.SCREEN_HEIGHT) {
-            this.y += Settings.PADDLE_SPEED;
-        }
+        this.y += Settings.PADDLE_SPEED;
     }
+
+
 }

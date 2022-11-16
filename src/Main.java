@@ -7,10 +7,12 @@ import javafx.animation.AnimationTimer;
 public class Main extends Application {
     private Game game;
 
+
     public static void main(String[] args) {
         //calls init(), start(), and stop()
         launch(args);
     }
+
 
     @Override
     public void start(Stage stage) {
@@ -25,6 +27,7 @@ public class Main extends Application {
             }
         }.start();
     }
+
 
     @Override
     public void stop() {
